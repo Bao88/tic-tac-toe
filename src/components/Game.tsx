@@ -1,27 +1,36 @@
 import React from "react";
 import Board from "./Board";
 
+interface GameState {
+    size: number
+    player: '' | 'X' | 'O'
+}
+
 class Game extends React.Component {
-    state = {
-        size: 3
+    state: GameState = {
+        size: 3,
+        player: 'X'
     }
 
-
-    componentDidMount () {
+    componentDidMount() {
         console.log("Game mounted")
     }
 
+    boardClicked = () => {
+        this.setState({ player: this.state.player == 'X' ? 'O' : 'X' })
+    }
+
     render() {
-        const props = { size: 3 }
+        const props = { ...this.state, handleClick: this.boardClicked }
 
         return (
             <div className="game">
                 <div className="game-board">
-                    <Board {...this.state} />
+                    <Board {...props} />
                 </div>
                 <div className="game-info">
-                    <div>{'Something'}</div>
-                    <ol>{/* TODO */}</ol>
+                    <div>{'Scoreboard'}</div>
+                    <ol>{`Player ${this.state.player}`}</ol>
                 </div>
             </div>
         )

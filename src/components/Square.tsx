@@ -1,18 +1,19 @@
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+import { Button, ButtonClasses } from '@mui/material';
 import React from 'react';
-
-type SquareState = '' | 'X' | 'O'
 
 interface SquareProps {
     x: number
     y: number
+    handleClick: Function
+    player: '' | 'X' | 'O'
 }
 
-export class Square extends React.Component {
+export class Square extends React.Component<SquareProps> {
     xCoord: number
     yCoord: number
     state: {
-        content: SquareState
+        content: '' | 'X' | 'O',
+        clicked: boolean
     }
 
     constructor(props: SquareProps) {
@@ -21,24 +22,35 @@ export class Square extends React.Component {
         this.yCoord = props.y
 
         this.state = {
-            content: ''
+            content: '',
+            clicked: false
         }
     }
 
     private squareClicked = () => {
-        this.setState({ content: 'X' })
-        console.log(this.setState)
+        this.setState({ content: this.props.player, clicked: true })
+        this.props.handleClick(this.xCoord, this.yCoord)
     }
 
     componentDidMount() {
-        console.log('hello word'+this.xCoord)
+        console.log(`square-${this.xCoord}-${this.yCoord}`)
     }
 
     render() {
         return (
-            <ButtonUnstyled title="square button" className="square" key={`square-${this.xCoord}-${this.yCoord}`} onClick={this.squareClicked} >
+            <Button
+                color={this.state.content === '' ? 'info' :
+                    this.state.content === 'X' ?
+                        'primary' : 'secondary'
+                }
+                variant="outlined"
+                title="square button"
+                className="square-button"
+                key={`square-${this.xCoord}-${this.yCoord}`}
+                onClick={this.squareClicked}
+            >
                 {this.state.content}
-            </ButtonUnstyled >
+            </Button >
         )
     }
 
